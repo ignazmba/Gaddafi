@@ -1,0 +1,20 @@
+ubuntu@ip-10-0-0-214:~$ history
+    1  sudo apt update -y
+    2  sudo apt install -y ansible
+    3  sudo apt install python-is-python3
+    4  sudo apt-get install python3-pip -y
+    5  sudo pip3 install boto
+    6  sudo pip3 install boto3
+    7  ansible-galaxy collection install amazon.aws
+    8  sudo vi aws_ec2.yaml
+    9  sudo vi /etc/ansible/ansible.cfg
+   10  ansible-inventory -i aws_ec2.yaml --list
+   11  sudo vi avi-jes-oregon.pem
+   12  chmod 400 avi-jes-oregon.pem
+   13  sudo chmod 400 avi-jes-oregon.pem
+   14  ansible aws_ec2 -i aws_ec2.yaml -m ping --private-key=avi-jes-oregon.pem --user ec2-user
+   15  sudo ansible aws_ec2 -i aws_ec2.yaml -m ping --private-key=avi-jes-oregon.pem --user ec2-user
+   16  sudo ansible aws_ec2 -i aws_ec2.yaml -m yum -a 'name=git state=present' --private-key=avi-jes-oregon.pem --become --user ec2-user
+   17  sudo vi test-playbook.yaml
+   18  sudo ansible-playbook -i aws_ec2.yaml -l aws_ec2 test-playbook.yaml --private-key=avi-jes-oregon.pem --user ec2-user
+   19  history

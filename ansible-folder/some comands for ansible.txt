@@ -1,0 +1,40 @@
+sudo ansible aws_ec2 -i aws_ec2.yaml -m ping --private-key=avi-jes-oregon.pem --user ec2-user
+
+
+
+
+
+sudo ansible aws_ec2 -i aws_ec2.yaml -m yum -a 'name=git state=present' --private-key=avi-jes-oregon.pem --become --user ec2-user
+
+---
+- name: sample playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: install httpd
+      yum:
+          name: httpd
+          state: latest
+
+    - name: run httpd
+      service:
+              name: httpd
+              state: started
+
+    - name: create content
+      copy:
+          content: "GM! Hello from JJTech"
+          dest: /var/www/html/index.html
+
+
+
+sudo ansible-playbook -i aws_ec2.yaml -l aws_ec2 test-playbook.yaml --private-key=avi-jes-oregon.pem --user ec2-user
+
+plugin: aws_ec2
+regions:
+  - us-west-2
+filters:
+  tag:Env:
+    - dev
+
+

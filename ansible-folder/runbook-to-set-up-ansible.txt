@@ -1,0 +1,56 @@
+I have a step by step write up for you guys..
+Master Server
+useradd: ansible
+Passwd: ansible
+Create your password- ansible
+Modify the sshd config
+# vi /etc/ssh/sshd_config
+In this file uncomment Password Authentication: Yes
+Uncomment PermitRootLog
+wq!
+# systemctl restart sshd
+# systemctl enable sshd
+# vi /etc/sudoers
+Search for wheel
+Under root add ansible
+ansible ALL=(ALL)  NOPASSWD: ALL
+===
+Install ansible
+# yum install epel_release
+# yum install ansible
+# cd/etc/ansible
+====
+Uncomment the inventory file
+# vi ansible.cfg
+Uncomment inventory
+wq!
+#vi hosts
+Uncomment webservers and add your slave IP to the webservers group.
+wq!
+Logout and log back in as user ansible
+#cd /etc/ansible
+Generate an ssh key
+# ssh-keygen -t rsa
+Give the key permission
+#chmod 700 /home/ansible/.ssh
+#ssh-copy-id ansible @IP of slave
+=============================
+Slave servers
+
+useradd: ansible
+Passwd: ansible
+Create your password- ansible
+Modify the sshd config
+# vi /etc/ssh/sshd_config
+In this file uncomment Password Authentication: Yes
+Uncomment PermitRootLog
+wq!
+# systemctl restart sshd
+# systemctl enable sshd
+# vi /etc/sudoers
+Search for wheel
+Under root add ansible
+ansible ALL=(ALL)  NOPASSWD: ALL
+=============================
+Test for connectivity by running ad-hoc
+# ansible webservers -m ping

@@ -1,0 +1,105 @@
+Step-by-Step Migration - AWS Database Migration Service (amazon.com)
+
+	HIGH LEVEL STEP 
+	HIGH LEVEL STEP 
+	MIGRATION FROM ORACLE TO POSTGRESQL WITH AWS DMS & SCT
+https://towardsdatascience.com/how-to-migrate-your-oracle-database-to-postgresql-b5d08e27ff31
+	·  1: Install the SQL Drivers and AWS Schema Conversion Tool on Your Local Computer
+	·  2: Configure Your Oracle Source Database
+	·  3: Configure Your PostgreSQL Target Database
+	·  4: Use the AWS Schema Conversion Tool (AWS SCT) to Convert the Oracle Schema to PostgreSQL
+	·  5: Create an AWS DMS Replication Instance
+	·  6: Create AWS DMS Source and Target Endpoints
+	·  7: Create and Run Your AWS DMS Migration Task
+	·  8: Cut Over to PostgreSQL ( if a cut over is needed)
+	
+	MIGRATION FROM ORACLE TO POSTGRESQL WITH AWS DMS & SCT
+	I used SCT To convert the schemas and DMS to move the Datas
+	
+	AWS DMS migrates your data from your Oracle source into your PostgreSQL target. 
+· AWS DMS also captures data manipulation language (DML) and supported data definition language (DDL) changes that happen on your source database are captured and applied  to your target database. This way, AWS DMS keeps your source and target databases in sync with each other
+· AWS SCT creates the migrated schemas on the target database, including the tables and primary key indexes on the target if necessary.
+
+· AWS DMS doesn't migrate your secondary indexes, sequences, default values, stored procedures, triggers, synonyms, views, and other schema objects not specifically related to data migration. To migrate these objects to your PostgreSQL target, use AWS SCT.
+	 1: Install the SQL Drivers and AWS Schema Conversion Tool on Your Local Computer
+	To install the SQL client software
+· Download the JDBC driver for your Oracle database release, go to https://www.oracle.com/jdbc.
+· Download the PostgreSQL driver (postgresql-42.1.4.jar).
+· Download and Install  AWS SCT 
+· Launch AWS SCT and Install the  Downloaded JDBC drivers for Oracle and Postgres SCT console
+	 
+	 
+	 2: Configure Your Oracle Source Database
+· Set my Oracle DB in ARCHIVELOG MODE
+	This  provide information in the redo log and archive redo files  for the  LogMiner. AWS DMS uses LogMiner to read information from the archive logs so that AWS DMS can capture changes
+· Supplemental logging must be enabled on your source database.
+	· Create a database User (with superuser privilege  ) to be used by AWS DMS & SCT to perform this job.
+	·  
+	 3: Configure Your PostgreSQL Target Database
+	I login to my company aws vpc using my IAM user account
+· Create a postgres database Under AWS RDS 
+	 
+· If the schemas you are migrating do not exist on the PostgreSQL database, then create the schemas.
+			 
+· Create the AWS DMS user to connect to your target database, and grant Superuser or the necessary privileges
+	· Create a user for AWS SCT and grant Superuser or the necessary privileges
+	 
+	 4: Use the AWS Schema Conversion Tool (AWS SCT) to Convert the Oracle Schema to PostgreSQL
+· Launch AWS SCT (To create a new project e.g schema conversion ora2pg )
+· specify the project name, source engine (Oracle) & Target Engine (Postgres)
+· Then Use SCT to Connect to Oracle by specifying connection options for oracle(like server name, Port-1521, Oracle SID, User Name & password. This will start the ORACLE INSTANCE
+· Also use SCT to connect to Postgres by specifying Postgres connection options ( such as server name, port-5432, Database, username & password). A POSTGRES INSTANCE WILL BE STARTED
+	 
+Ø Select the schema(s) to migrate (On oracle side ),
+Ø  RIGH CLICK ON IT and then choose Convert schema. 
+Ø SCT will Analyze and convert the schema to the Target Database Format.
+Get SCT ASSESSMENT REPORT  
+After converting the schema, SCT provides an assessment report for you to analyze and perform some Manual actions.
+· NOTE packages, procedures, constraints and functions are most likely to have some issues to resolve because they contain the most custom PL/SQL code
+SCT ACTION TAB (FOR CODE CONVERSION) - packages, procedures, constraints and functions
+· Either modify the source schema and try the conversion again  OR
+· Use SCT to generate a script, Modify it  and run on the target
+ 
+	 5: Create an AWS DMS Replication Instance
+	After validating the schema structure between source and target databases, Now perform the Migration.
+		HOW TO CREATE A REPLICATION INSTANCE
+· I signed in with an AWS Identity and Access Management (IAM) user, then I was granted  the appropriate permissions to launch AWS DMS
+· On the AWS Management Console, select AWS DMS
+· Then Next, choose Create Migration.
+		  The replication Instance will connect to the Source, pull data and load it into the Target.
+		If the source and Target are on a different server outside the VPC where the replication server reside then we must configure the endpoints.
+		
+	 
+· Next, I specify my replication instance information
+· I used  c4 instance class  for higher load and more tasks.
+		· An AWS DMS replication instance performs the actual data migration between source and target. The replication instance also caches the transaction logs during the migration
+	 
+	  HOW TO CREATE ENDPOINTS ON DMS   
+	Endpoints are created if the source and Target databases are residing on a different VPC away from the Replication Server
+- Select the source Database endpoint identifier-Orasource, Engine name-Oracle, Port-1521, User Name-Oraadmin, password, SID-orcl.  DO THE SAME FOR THE TARGET….
+-  Run a test for the endpoints to make sure it works.
+	 
+	7: Create and Run Your AWS DMS Migration Task
+· Using an AWS DMS task, you can specify which schema to migrate and the type of migration.
+
+Types of Migration Using DMS
+· Migrate existing data OR Migrate existing data and replicate ongoing changes
+
+· Create a migration task
+On the DMS Create Task page, specify the task options-
+- Specify the Task name,
+-  task description, 
+- source endpoint & Target endpoint, 
+- Replication Instance, 
+- Migration type (CDC)
+v RUN THE MIGRATION   ( By Clicking on Run Migration on the DMS console)
+The replication Instance will connect to the Source, pull data and load it into the Target.
+If the source and Target are on a different server outside the VPC where the replication server reside then we must configure the endpoints.
+
+· ==============
+	ACTIONS AFTER THE MIGRATION TASK IS HAS FINSIHED
+· On the target PostgreSQL database, enable foreign key constraints and triggers using the script you saved previously.
+· On the target PostgreSQL database, re-create the secondary indexes if you removed them previously.
+	The AWS DMS task keeps the target PostgreSQL database up-to-date with source database changes. AWS DMS will keep all of the tables in the task up-to-date until it is time to implement the application migration. The latency will be zero, or close to zero, when the target has caught up to the source
+	 
+Step 8: Cut Over to PostgreSQL

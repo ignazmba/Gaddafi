@@ -1,0 +1,13 @@
+create ec2-open port 22,433,80.
+create a new user or attach to old user AWS-APPLICATION-MIGRATION-AGENT permission
+test to see nginx working in a new brower.
+on the console-MGN(application migrationservice)  - choose your sg-public subnet-create template.
+fill in- add server(linux) -find your user(from line 2)- find its Ak and SAK (keys)-  copy commands from the template creation page (1,2)
+click back
+back to instance- sshed into- paste command 1 and then 2- see successful installation of the MGN-Agent
+back to console see server loading- find " test/cutover drop down- 
+choose launch-test(creates ec2), then ready for testing, laucn cutover instances
+finalize cutover- note that the rep instance is terminated and your new web server hosting your nginx application has no public ip address.
+
+NOTE; to check successful migration of resources- 
+use an ec2 as a bastian host to ssh into the new web server to see status of your nginx application

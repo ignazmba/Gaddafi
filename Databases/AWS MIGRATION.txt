@@ -1,0 +1,75 @@
+MIGRATION
+
+**********CART -AWS CLOUD ADOPTION READINESS TOOL
+COMPRISES OF 16 QUESTION
+--------------------------------------------------------------
+--------------------------------------------------------------
+ANSWER THE QUESTIONS BASED ON YOUR ORGANIZATION
+
+VIEW ASSESSMENT
+
+FILL THE FORM ON THE RIGHT 
+SUBMIT 
+
+---------------------------------------------------------------
+
+
+--------------------------------------------------------------
+--------------------------------------------------------------
+CREATE 2 EC2 INSTANCES
+WITH SSH PORT OPENED
+
+
+CREATE A USER ADS_USER
+ASSING ADMIN PRIVILEDEGE
+
+DOWNLOAD  CSV FILE
+
+---------------------------------------------------------------
+******APPLICATION DISCOVERY SERVICE
+
+GO TO ADS  SERVICE (MIGRATION HUB)
+
+SELECT A REGION
+
+--------------------------------------------------------------
+--------------------------------------------------------------
+ON THE TERMINAL EC2 INSTANCE: 
+
+PASTE AND RUN COMAND TO DOWNLOAD A TAR FILE
+curl -o ./aws-discovery-agent.tar.gz https://s3-us-west-2.amazonaws.com/aws-discovery-agent.us-west-2/linux/latest/aws-discovery-agent.tar.gz
+
+ls to see the agent is installed
+
+*******(FILE) aws-discovery-agent.tar.gz
+
+
+RUN COMAND BELOW TO unzip the file command
+tar -xzf aws-discovery-agent.tar.gz
+
+*****run the 3rd comand edit to match your accesskey and secret assess key
+sudo bash install -r us-west-2 -k AKIAYISMX2RDGS3CYW5F -s PrXHZS7HQNPB7XcHUaxlT2ajAmib+PZTLAlxZKxJ
+
+
+---------------------------------------------------------------
+
+
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+
+---------------------------------------------------------------
+
+
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+
+---------------------------------------------------------------
+
+
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+
+---------------------------------------------------------------

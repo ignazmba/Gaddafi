@@ -1,0 +1,34 @@
+sudo apt update -y
+sudo apt install -y ansible
+sudo apt install python-is-python3
+sudo apt-get install python3-pip -y
+sudo pip3 install boto
+sudo pip3 install boto3
+ansible-galaxy collection install amazon.aws
+sudo vi aws_ec2.yaml
+Then you pass this file
+plugin: aws_ec2
+regions:
+  - us-west-2
+---
+- name: sample playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: install httpd
+      yum:
+          name: httpd
+          state: latest
+
+    - name: run httpd
+      service:
+              name: httpd
+              state: started
+
+    - name: create content
+      copy:
+          content: "GM! Hello from JJTech"
+          dest: /var/www/html/index.html
+after esc then run the following command
+
+sudo ansible-playbook -i aws_ec2.yaml -l aws_ec2 test-playbook.yaml --private-key=avi-jes-oregon.pem --user ec2-use
